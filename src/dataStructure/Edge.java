@@ -1,20 +1,26 @@
 package dataStructure;
 
+import java.util.HashMap;
+
 public class Edge implements edge_data {
 	private int src; // where the edge comes from
 	private int dst; // where the edge ends
 	private double cost;
+
+	public Edge copy() { // copy function
+		Edge n = new Edge(this.src, this.dst, this.cost);
+		 HashMap<Integer, edge_data> newHash= new  HashMap<Integer, edge_data>();
+		return n;
+	}
 
 	public Edge(int src, int dst, double cost) {
 		this.src = src;
 		this.dst = dst;
 		this.cost = cost;
 	}
+
 	public void setCost(double cost) {
-		this.cost=cost;
-	}
-	public double getCost() {
-		return this.cost;
+		this.cost = cost;
 	}
 
 	@Override

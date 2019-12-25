@@ -1,15 +1,14 @@
 package dataStructure;
 
-import java.util.HashMap;
-
 import utils.Point3D;
 
 public class Node implements node_data {
+	private boolean isFirst = true;
 	private int id; // the name of the node
-	private int pred; // the node we came from - the parent
-	private boolean visited; // variable that we know if we have been in some
+	private int info; // the node we came from - the parent
+	private int tag; // variable that we know if we have been in some
 	private double weight; // the cost from one vertext to another
-	private HashMap<Integer, Edge> neighboors = new HashMap<Integer, Edge>();
+	private Point3D point;
 	private static int NIL = -1;
 
 //	public Node() { // **************************//
@@ -19,36 +18,25 @@ public class Node implements node_data {
 //		this.weight = Double.POSITIVE_INFINITY;
 //	}
 
-	public Node(int id) {
+	public Node(int id,Point3D point) {
 		this.id = id;
 		this.weight = Double.POSITIVE_INFINITY;
-		this.visited = false;
-		this.pred = NIL;
-	}
+		this.tag = 0;
+		this.info = NIL;
+		setLocation(point);
 
-	public Node copy() { // copy function
-		Node n = new Node(this.id);
-		n.weight = this.weight;
-		n.visited = this.visited;
-		n.pred = this.pred;
-		return n;
-	}
-
-	public void setMap(int dest, double cost) {
-		if (this.neighboors.containsKey(dest))
-			this.neighboors.get(dest).setCost(cost);
-		else {
-			Edge e = new Edge(this.id, dest, cost); // creating the edge
-			this.neighboors.put(dest, e); // setting the neightboor in the hashmap
+		if (this.isFirst) {
+			this.weight = 0;
+			this.isFirst = false;
 		}
 	}
 
-	public void deleteEdge(int dest) {
-		this.neighboors.remove(dest);
-	}
-
-	public HashMap<Integer, Edge> getMap() {
-		return neighboors;
+	public Node copy() { // copy function
+		Node n = new Node(this.id,this.point);
+		n.weight = this.weight;
+		n.tag = this.tag;
+		n.info = this.info;
+		return n;
 	}
 
 	@Override
@@ -58,13 +46,17 @@ public class Node implements node_data {
 
 	@Override
 	public Point3D getLocation() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.point;
+		
 	}
 
 	@Override
 	public void setLocation(Point3D p) {
-		// TODO Auto-generated method stub
+		double x=p.x();
+		double y=p.y();
+		double z=p.z();
+
+		this.point=new Point3D (x,y,z);
 	}
 
 	@Override
@@ -79,30 +71,28 @@ public class Node implements node_data {
 
 	@Override
 	public String getInfo() {
-		// TODO Auto-generated method stub
-		return null;
+		return String.valueOf(info);
+		
 	}
 
 	@Override
 	public void setInfo(String s) {
-		// TODO Auto-generated method stub
+		this.info=Integer.valueOf(s);
 
 	}
 
 	@Override
 	public int getTag() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.tag;
 	}
 
 	@Override
 	public void setTag(int t) {
-		// TODO Auto-generated method stub
-
+		this.tag = t;
 	}
 
 	public String toString() {
-		return "id: " + id + " pred: " + pred + " visited: " + visited + " weight: " + weight;
+		return "id: " + id;
 	}
 
 }

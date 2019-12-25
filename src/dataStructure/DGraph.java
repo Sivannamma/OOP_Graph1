@@ -3,8 +3,21 @@ package dataStructure;
 import java.util.Collection;
 import java.util.HashMap;
 
+import com.google.gson.Gson;
+
 public class DGraph implements graph {
-	private HashMap<Integer, node_data> map = new HashMap<Integer, node_data>();
+	private HashMap<Integer, node_data> map;
+	private HashMap<node_data, HashMap<Integer, edge_data>> neighboors;
+	private int MC;
+	private int EdgeCount;
+
+	public DGraph() {
+		this.map = new HashMap<Integer, node_data>();
+		this.neighboors = new HashMap<node_data, HashMap<Integer, edge_data>>();
+		MC = 0;
+		EdgeCount = 0;
+
+	}
 
 	@Override
 	public node_data getNode(int key) {
@@ -13,55 +26,67 @@ public class DGraph implements graph {
 
 	@Override
 	public edge_data getEdge(int src, int dest) {
-		if (this.map.get(src) instanceof Node) // if its an instance, we cast and search for the dest in the neightboors
-												// hashmap
-			return ((Node) (this.map.get(src))).getMap().get(dest);
-		else
-			throw new RuntimeException("the element is not an instance of Node");
+		return this.neighboors.get(this.map.get(src)).get(dest);
 	}
 
 	@Override
 	public void addNode(node_data n) {
 		this.map.put(n.getKey(), n);
+		// adding to the neighboors hashmap, initializing the inner hashmap
+		this.neighboors.put(n, new HashMap<Integer, edge_data>());
+		MC++; // because we performed a change in the graph
 	}
 
 	@Override
 	public void connect(int src, int dest, double w) {
-		if (this.map.get(src) instanceof Node) // if its an instance, we cast and search for the dest in the neightboors
-			// hashmap
-			((Node) this.map.get(src)).setMap(dest, w);
-		else
-			throw new RuntimeException("the element is not an instance of Node");
-
+		if (!(this.neighboors.get(this.map.get(src)).containsKey(dest)))
+			EdgeCount++;
+		this.neighboors.get(this.map.get(src)).put(dest, new Edge(src, dest, w));
+		MC++; // because we performed a change in the graph
 	}
 
 	@Override
 	public Collection<node_data> getV() {
-		return (Collection<node_data>) this.map;
+		return this.map.values();
 	}
 
 	@Override
 	public Collection<edge_data> getE(int node_id) {
-		if (this.map.get(node_id) instanceof Node) // if its an instance, we cast and search for the dest in the
-													// neightboors hashmap
-			return (Collection<edge_data>) ((Node) this.map.get(node_id)).getMap();
-		else
-			throw new RuntimeException("the element is not an instance of Node");
+		return this.neighboors.get(this.map.get(node_id)).values();
 	}
 
 	@Override
 	public node_data removeNode(int key) {
+		MC++; // because we performed a change in the graph
+		deleteEdgeFromNei(key); // deleting all the edges where the sc is the dest from certain node
 		return this.map.remove(key);
 	}
 
 	@Override
 	public edge_data removeEdge(int src, int dest) {
-		if (this.map.get(src) instanceof Node) // if its an instance, we cast and search for the dest in the neightboors
-			// hashmap
-			((Node) this.map.get(src)).deleteEdge(dest);
-		else
-			throw new RuntimeException("the element is not an instance of Node");
-		return null;
+		edge_data edge = this.neighboors.get(this.map.get(src)).get(dest);
+		if (edge != null) {
+			this.neighboors.get(this.map.get(src)).remove(dest);
+			MC++; // because we performed a change in the graph
+			this.EdgeCount--;
+		}
+		return edge;
+	}
+
+	private void deleteEdgeFromNei(int dest) {
+		for (node_data n : this.getV()) {
+			if(this.getE(n.getKey()) != null) {
+				for (edge_data e : this.getE(n.getKey())) {
+					if (e.getDest() == dest) {
+						this.neighboors.get(n).remove(dest);
+						break;
+					}
+					
+					
+				}
+			}
+			
+		}
 	}
 
 	@Override
@@ -71,14 +96,28 @@ public class DGraph implements graph {
 
 	@Override
 	public int edgeSize() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.EdgeCount;
 	}
 
 	@Override
 	public int getMC() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.MC;
 	}
 
+	public HashMap<Integer, node_data> getMap() {
+		return this.map;
+	}
+
+	public String toString() {
+		String ans = "";
+
+		// Iterating over keys and using it to get the data from our hashmaps data
+		// structure
+		for (Integer key : this.map.keySet()) {
+			ans += this.map.get(key).toString() + " ,neighboors: " + this.neighboors.get(this.map.get(key)).toString()
+					+ " ";
+			ans += "\n";
+		}
+		return ans;
+	}
 }
