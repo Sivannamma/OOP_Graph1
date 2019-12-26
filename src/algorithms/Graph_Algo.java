@@ -56,15 +56,17 @@ public class Graph_Algo implements graph_algorithms {
 		return false;
 	}
 
-// TO FIX THIS BUG *******
 	private double sumPath() {
 		double ans = 0;
 
-//		for(int i =list.size()-1;i>=0;i--) {
-//			node_data temp = list[i];
-//			
-//		}
-
+		for (int j = list.size() - 1; j > 0; j--) {
+			// getting the edges that are connected to the node_data in place j of the list
+			Collection<edge_data> col = this.current.getE(list.get(j).getKey());
+			for (edge_data e : col) { // iterating through the neighboors of this current node
+				if (e.getDest() == list.get(j - 1).getKey())
+					ans += e.getWeight();
+			}
+		}
 		return ans;
 	}
 

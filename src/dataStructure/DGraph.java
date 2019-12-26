@@ -75,17 +75,16 @@ public class DGraph implements graph {
 
 	private void deleteEdgeFromNei(int dest) {
 		for (node_data n : this.getV()) {
-			if(this.getE(n.getKey()) != null) {
+			if (this.getE(n.getKey()) != null) {
 				for (edge_data e : this.getE(n.getKey())) {
 					if (e.getDest() == dest) {
 						this.neighboors.get(n).remove(dest);
 						break;
 					}
-					
-					
+
 				}
 			}
-			
+
 		}
 	}
 
@@ -106,6 +105,10 @@ public class DGraph implements graph {
 
 	public HashMap<Integer, node_data> getMap() {
 		return this.map;
+	}
+
+	public HashMap<node_data, HashMap<Integer, edge_data>> getNei() {
+		return this.neighboors;
 	}
 
 	public String toString() {
