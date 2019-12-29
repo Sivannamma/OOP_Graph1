@@ -24,10 +24,11 @@ public class test {
 		d1.connect(3, 4, 4);
 		d1.connect(3, 1, 4);
 		d1.connect(4, 2, 4);
-
 		Graph_Algo d2 = new Graph_Algo();
 		d2.init(d1);
-		System.out.println(d2.getGraph());
-		System.out.println(d2.isConnected());
+		//System.out.println(d2.getGraph());
+		//System.out.println(d2.isConnected());
+		d2.save("myGraph.txt");
+		
 	}
 }

@@ -28,12 +28,54 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public void init(String file_name) {
-		// TODO Auto-generated method stub
+		graph g = null; 
+	       
+        try
+        {    
+            FileInputStream file = new FileInputStream(file_name); 
+            ObjectInputStream in = new ObjectInputStream(file); 
+              
+            g = (DGraph)in.readObject(); 
+              
+            in.close(); 
+            file.close(); 
+              
+            System.out.println("Object has been deserialized"); 
+            System.out.println(g);
+        } 
+          
+        catch(IOException ex) 
+        { 
+            System.out.println("IOException is caught"); 
+        } 
+          
+        catch(ClassNotFoundException ex) 
+        { 
+            System.out.println("ClassNotFoundException is caught"); 
+        } 
+		
 	}
 
 	@Override
 	public void save(String file_name) {
-		// TODO Auto-generated method stub
+        String filename = file_name; 
+          
+        try
+        {    
+            FileOutputStream file = new FileOutputStream(filename); 
+            ObjectOutputStream out = new ObjectOutputStream(file); 
+              
+            out.writeObject(this.current); 
+              
+            out.close(); 
+            file.close(); 
+              
+            System.out.println("Graph has been serialized"); 
+        }   
+        catch(IOException ex) 
+        { 
+            System.out.println("IOException is caught"); 
+        } 
 	}
 
 	@Override
