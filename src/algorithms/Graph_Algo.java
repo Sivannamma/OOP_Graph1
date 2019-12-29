@@ -38,16 +38,46 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public boolean isConnected() {
-		// TODO Auto-generated method stub
-		return false;
+		boolean nei = false;
+		for (node_data key : this.current.getV()) { // itearting through the hashmap
+			Collection<edge_data> col = this.current.getE(key.getKey()); // creating collection on neighbors of the
+			// specific node
+			System.out.println(col);
+			for (node_data path : this.current.getV()) { // itearting again on nodes
+				if (path != key) { // if we are not on the same node
+					for (edge_data e : col) {
+
+						if ((e.getDest() == (path.getKey()))) { // if its a nei- no need to search a path
+							nei = true;
+							break;
+						}
+					}
+					if (!nei) {// if path is not neighbor of key, go find a path
+						initVisited(); // initializing the tag to be not visited- working on the same graph
+						list = null;
+						if (shortestPathDist(key.getKey(), path.getKey()) == Double.POSITIVE_INFINITY) {
+							return false;
+						}
+					}
+				}
+				nei = false;
+			}
+		}
+		return true;
+	}
+
+	private void initVisited() {
+		for (node_data current : this.current.getV()) {
+			current.setTag(0);
+		}
 	}
 
 	public graph getGraph() {
 		return this.current;
 	}
 
-	// this function checks if we visited all the nodes in the graph,
-	// once we found a place we didnt visit we return 0
+// this function checks if we visited all the nodes in the graph,
+// once we found a place we didnt visit we return 0
 	private boolean isVisited() {
 		for (node_data key : this.current.getV()) {
 			if (key.getTag() == 0)
@@ -57,6 +87,9 @@ public class Graph_Algo implements graph_algorithms {
 	}
 
 	private double sumPath() {
+		if (list == null || list.isEmpty()) {
+			return Double.POSITIVE_INFINITY;
+		}
 		double ans = 0;
 
 		for (int j = list.size() - 1; j > 0; j--) {
@@ -70,8 +103,8 @@ public class Graph_Algo implements graph_algorithms {
 		return ans;
 	}
 
-	// this function returns the next node with the minimum weight- the next node to
-	// be dealing with
+// this function returns the next node with the minimum weight- the next node to
+// be dealing with
 	private Integer isNextMin() {
 		node_data ans = null;
 		for (node_data key : this.current.getV()) {
@@ -91,6 +124,7 @@ public class Graph_Algo implements graph_algorithms {
 		return ans.getKey();
 	}
 
+// we initialize the src weight to be 0, and the others to be infinity
 	private void setWeight(int src) {
 		for (node_data key : this.current.getV()) {
 			if (key.getKey() != src)
@@ -104,13 +138,16 @@ public class Graph_Algo implements graph_algorithms {
 	public double shortestPathDist(int src, int dest) {
 		if (list == null) {
 			shortestPath(src, dest);
-			System.out.println(list.toString());
+			// System.out.println(list.toString());
 		}
 		return sumPath();
 	}
 
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
+		Collection<edge_data> nei = this.current.getE(src);
+		if (nei.isEmpty())
+			return null;
 		setWeight(src); // setting the start point
 		// System.out.println(this.current.getNode(src).getWeight());
 		// while we have more nodes to go to- inner function
@@ -125,7 +162,7 @@ public class Graph_Algo implements graph_algorithms {
 				if (check < this.current.getNode(e.getDest()).getWeight()) {
 					this.current.getNode(e.getDest()).setWeight(check);// setting the new cheap weight
 					this.current.getNode(e.getDest()).setInfo(String.valueOf(e.getSrc()));// setting the predesscor of
-																							// this node
+					// this node
 				}
 			}
 
@@ -136,10 +173,13 @@ public class Graph_Algo implements graph_algorithms {
 		node_data temp = this.current.getNode(dest);
 		while (temp != this.current.getNode(src)) {
 			list.add(temp);
+			if (temp.getInfo().equals("-1")) {
+				list.clear();
+				return list;
+			}
 			temp = this.current.getNode(Integer.parseInt(temp.getInfo()));
 		}
 		list.add(temp);
-
 		return list;
 	}
 
