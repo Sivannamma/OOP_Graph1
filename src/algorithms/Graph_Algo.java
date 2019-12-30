@@ -1,10 +1,16 @@
 package algorithms;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import dataStructure.DGraph;
+import dataStructure.Node;
 import dataStructure.edge_data;
 import dataStructure.graph;
 import dataStructure.node_data;
@@ -28,54 +34,47 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public void init(String file_name) {
-		graph g = null; 
-	       
-        try
-        {    
-            FileInputStream file = new FileInputStream(file_name); 
-            ObjectInputStream in = new ObjectInputStream(file); 
-              
-            g = (DGraph)in.readObject(); 
-              
-            in.close(); 
-            file.close(); 
-              
-            System.out.println("Object has been deserialized"); 
-            System.out.println(g);
-        } 
-          
-        catch(IOException ex) 
-        { 
-            System.out.println("IOException is caught"); 
-        } 
-          
-        catch(ClassNotFoundException ex) 
-        { 
-            System.out.println("ClassNotFoundException is caught"); 
-        } 
-		
+
+		try {
+			FileInputStream file = new FileInputStream(file_name);
+			ObjectInputStream in = new ObjectInputStream(file);
+
+			this.current = (graph) in.readObject();
+
+			in.close();
+			file.close();
+
+			System.out.println("Object has been deserialized");
+			System.out.println(this.current);
+		}
+
+		catch (IOException ex) {
+			System.out.println("IOException is caught");
+		}
+
+		catch (ClassNotFoundException ex) {
+			System.out.println("ClassNotFoundException is caught");
+		}
+
 	}
 
 	@Override
 	public void save(String file_name) {
-        String filename = file_name; 
-          
-        try
-        {    
-            FileOutputStream file = new FileOutputStream(filename); 
-            ObjectOutputStream out = new ObjectOutputStream(file); 
-              
-            out.writeObject(this.current); 
-              
-            out.close(); 
-            file.close(); 
-              
-            System.out.println("Graph has been serialized"); 
-        }   
-        catch(IOException ex) 
-        { 
-            System.out.println("IOException is caught"); 
-        } 
+		String filename = file_name;
+
+		try {
+			FileOutputStream file = new FileOutputStream(filename);
+			ObjectOutputStream out = new ObjectOutputStream(file);
+
+			out.writeObject(this.current);
+
+			out.close();
+			file.close();
+
+			System.out.println("Graph has been serialized");
+		} catch (IOException ex) {
+			System.out.println("IOException is caught");
+		}
 	}
 
 	@Override
@@ -84,7 +83,6 @@ public class Graph_Algo implements graph_algorithms {
 		for (node_data key : this.current.getV()) { // itearting through the hashmap
 			Collection<edge_data> col = this.current.getE(key.getKey()); // creating collection on neighbors of the
 			// specific node
-			System.out.println(col);
 			for (node_data path : this.current.getV()) { // itearting again on nodes
 				if (path != key) { // if we are not on the same node
 					for (edge_data e : col) {
@@ -176,6 +174,19 @@ public class Graph_Algo implements graph_algorithms {
 		}
 	}
 
+	private boolean isContained(int src, int dest) {
+		int count = 0;
+		for (node_data key : this.current.getV()) {
+			if (key.getKey() == src)
+				count++;
+			if (key.getKey() == dest)
+				count++;
+		}
+		// two means they are both contained in the nodes in the graph
+		return (count == 2) ? true : false;
+
+	}
+
 	@Override
 	public double shortestPathDist(int src, int dest) {
 		if (list == null) {
@@ -187,9 +198,14 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
+		if (!isContained(src, dest)) {
+			throw new RuntimeException("nodes must be in the graph");
+		}
+
 		Collection<edge_data> nei = this.current.getE(src);
 		if (nei.isEmpty())
 			return null;
+
 		setWeight(src); // setting the start point
 		// System.out.println(this.current.getNode(src).getWeight());
 		// while we have more nodes to go to- inner function
@@ -237,10 +253,12 @@ public class Graph_Algo implements graph_algorithms {
 		DGraph g = new DGraph();
 		Collection<node_data> col = this.current.getV();
 
+		// for the main hashmap.
 		for (node_data n : col) {
-			g.addNode(n);
+			node_data newNode = new Node(n.getKey(), n.getLocation());
+			g.addNode(newNode);
+			Collection<edge_data> nei = this.current.getE(n.getKey());
 		}
-
 		return g;
 	}
 

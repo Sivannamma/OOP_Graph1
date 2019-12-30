@@ -1,6 +1,7 @@
 package dataStructure;
 
 import algorithms.Graph_Algo;
+import gui_graph.GUI_window;
 import utils.Point3D;
 
 public class test {
@@ -9,11 +10,7 @@ public class test {
 		Node n2 = new Node(2, new Point3D(34, 67));
 		Node n3 = new Node(3, new Point3D(23, 65));
 		Node n4 = new Node(4, new Point3D(15, 23));
-		// Node n5 = new Node(5, new Point3D(34, 67));
-		// Node n6 = new Node(6, new Point3D(23, 65));
-		// Node n7 = new Node(7, new Point3D(23, 65));
-		// Node n8 = new Node(8, new Point3D(23, 65));
-		// Node n9 = new Node(9, new Point3D(23, 65));
+
 		DGraph d1 = new DGraph();
 		d1.addNode(n1);
 		d1.addNode(n2);
@@ -26,9 +23,11 @@ public class test {
 		d1.connect(4, 2, 4);
 		Graph_Algo d2 = new Graph_Algo();
 		d2.init(d1);
-		//System.out.println(d2.getGraph());
-		//System.out.println(d2.isConnected());
-		d2.save("myGraph.txt");
-		
+//		 System.out.println(d2.getGraph());
+//		 System.out.println(d2.isConnected());
+//		 d2.save("myGraph.txt");
+//		 d2.init("myGraph.txt");
+		GUI_window g = new GUI_window(d2);
+		g.setVisible(true);
 	}
 }
