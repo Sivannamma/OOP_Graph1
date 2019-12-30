@@ -1,5 +1,6 @@
 package gui_graph;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Menu;
@@ -10,36 +11,39 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import algorithms.Graph_Algo;
+import dataStructure.node_data;
 
 public class GUI_window extends JFrame implements ActionListener, MouseListener {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	Graph_Algo graph;
 	JTextField text_src;
 	JTextField text_dest;
-	JButton button_weight;
-	JButton button_path;
+	JTextField input;
+	JButton button;
+	JLabel label;
 
 	public GUI_window(Graph_Algo graph) {
 		this.graph = graph;
 		text_src = new JTextField();
 		text_dest = new JTextField();
+		input = new JTextField();
+		input.setVisible(false);
 		text_src.setVisible(false);
 		text_dest.setVisible(false);
-		button_weight = new JButton("submit(weight)");
-		button_weight.setVisible(false);
-		button_path = new JButton("submit(path)");
-		button_path.setVisible(false);
+		button = new JButton("");
+		button.setVisible(false);
+		label = new JLabel("Please enter a list of targets: ");
+		label.setVisible(false);
 
 		init_window();
 	}
@@ -84,6 +88,9 @@ public class GUI_window extends JFrame implements ActionListener, MouseListener 
 		shortPath.addActionListener(this);
 		MenuItem shortPathWeight = new MenuItem("shortestPathWeight");
 		shortPathWeight.addActionListener(this);
+		MenuItem tsp = new MenuItem("TSP");
+		tsp.addActionListener(this);
+		algorithms.add(tsp);
 		algorithms.add(shortPath);
 		algorithms.add(shortPathWeight);
 		algorithms.add(isConnected);
@@ -100,14 +107,14 @@ public class GUI_window extends JFrame implements ActionListener, MouseListener 
 		text_dest.setBounds(500, 20, 40, 20);
 		this.add(text_dest);
 		// button_weight
-		this.button_weight.setLocation(450, 25);
-		this.button_weight.addActionListener(this);
-		this.add(button_weight);
-		// button_path
-		this.button_path.setLocation(450, 25);
-		this.button_path.addActionListener(this);
-		this.add(button_path);
+		this.button.setLocation(450, 25);
+		this.button.addActionListener(this);
+		this.add(button);
+		this.add(input);
 
+		// label of list targets
+
+		this.add(label);
 		this.addMouseListener(this);
 
 	}
@@ -141,8 +148,36 @@ public class GUI_window extends JFrame implements ActionListener, MouseListener 
 	public void actionPerformed(ActionEvent e) {
 
 		String str = e.getActionCommand();
-
+		setTextFalse();
 		switch (str) {
+		case "TSP": {
+			// for the way it shows
+			this.setLayout(null);
+			label.setBounds(200, 30, 200, 30);
+			input.setBounds(200, 60, 150, 25);
+			input.setText("");
+			button.setText("submit list");
+			label.setVisible(true);
+			Dimension size = button.getPreferredSize();
+			button.setBounds(370, 60, size.width, size.height);
+			input.setVisible(true);
+			button.setVisible(true);
+			break;
+		}
+
+		case "submit list": {
+			String src = input.getText();
+			List<Integer> list = new ArrayList<Integer>();
+			for (int i = 0; i < src.length(); i++) {
+				if (src.charAt(i) != ',') {
+					list.add((int) src.charAt(i) - 48);
+				}
+			}
+			List<node_data> newList = this.graph.TSP(list);
+			setFalse();
+			JOptionPane.showMessageDialog(null, newList, "TSP: ", JOptionPane.DEFAULT_OPTION);
+			break;
+		}
 		case "Save graph": {
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setDialogTitle("Specify a file to save");
@@ -162,17 +197,18 @@ public class GUI_window extends JFrame implements ActionListener, MouseListener 
 		case "isConnected": {
 			JOptionPane.showMessageDialog(null, this.graph.isConnected(), "Is the graph connected?",
 					JOptionPane.DEFAULT_OPTION);
-			this.graph.isConnected();
 
 			break;
 		}
 		case "shortestPath": {
-			setTrue('p'); // calling to set the button to visible
+			button.setText("submit(path)");
+			setTrue(); // calling to set the button to visible
 			break;
 		}
 
 		case "shortestPathWeight": {
-			setTrue('w'); // calling to set the button to visible
+			button.setText("submit(weight)");
+			setTrue(); // calling to set the button to visible
 			break;
 		}
 
@@ -195,23 +231,32 @@ public class GUI_window extends JFrame implements ActionListener, MouseListener 
 		}
 	}
 
-// function to set all the buttons and text fields to false;
-	private void setFalse() {
-		text_src.setText("src");
-		text_dest.setText("dest");
+	private void setTextFalse() {
+		this.getContentPane().setLayout(new FlowLayout());
+		label.setVisible(false);
 		text_src.setVisible(false);
 		text_dest.setVisible(false);
-		button_path.setVisible(false);
-		button_weight.setVisible(false);
+		button.setVisible(false);
+		input.setVisible(false);
+
+	}
+
+// function to set all the buttons and text fields to false;
+	private void setFalse() {
+		// set flow layout for the frame
+		this.getContentPane().setLayout(new FlowLayout());
+		text_src.setText("src");
+		text_dest.setText("dest");
+		label.setVisible(false);
+		text_src.setVisible(false);
+		text_dest.setVisible(false);
+		button.setVisible(false);
+		input.setVisible(false);
 	}
 
 // function to set the parameters that we need to visible;
-	private void setTrue(char which) {
-		if (which == 'p') // means we want the button for path
-			button_path.setVisible(true);
-		if (which == 'w') // means we want the weight button
-			button_weight.setVisible(true);
-
+	private void setTrue() {
+		button.setVisible(true);
 		text_src.setVisible(true);
 		text_dest.setVisible(true);
 	}

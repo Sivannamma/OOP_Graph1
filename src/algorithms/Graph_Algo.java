@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import dataStructure.DGraph;
@@ -23,6 +24,7 @@ import dataStructure.node_data;
  *
  */
 public class Graph_Algo implements graph_algorithms {
+	private static final long serialVersionUID = 1L;
 	private graph current;
 	private List<node_data> list;
 	private double costAns = 0;
@@ -60,10 +62,9 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public void save(String file_name) {
-		String filename = file_name;
 
 		try {
-			FileOutputStream file = new FileOutputStream(filename);
+			FileOutputStream file = new FileOutputStream(file_name);
 			ObjectOutputStream out = new ObjectOutputStream(file);
 
 			out.writeObject(this.current);
@@ -116,8 +117,8 @@ public class Graph_Algo implements graph_algorithms {
 		return this.current;
 	}
 
-// this function checks if we visited all the nodes in the graph,
-// once we found a place we didnt visit we return 0
+	// this function checks if we visited all the nodes in the graph,
+	// once we found a place we didnt visit we return 0
 	private boolean isVisited() {
 		for (node_data key : this.current.getV()) {
 			if (key.getTag() == 0)
@@ -126,25 +127,26 @@ public class Graph_Algo implements graph_algorithms {
 		return false;
 	}
 
+//
 	private double sumPath() {
 		if (list == null || list.isEmpty()) {
 			return Double.POSITIVE_INFINITY;
 		}
 		double ans = 0;
 
-		for (int j = list.size() - 1; j > 0; j--) {
+		for (int j = 0; j < list.size() - 1; j++) {
 			// getting the edges that are connected to the node_data in place j of the list
 			Collection<edge_data> col = this.current.getE(list.get(j).getKey());
 			for (edge_data e : col) { // iterating through the neighboors of this current node
-				if (e.getDest() == list.get(j - 1).getKey())
+				if (e.getDest() == list.get(j + 1).getKey())
 					ans += e.getWeight();
 			}
 		}
 		return ans;
 	}
 
-// this function returns the next node with the minimum weight- the next node to
-// be dealing with
+	// this function returns the next node with the minimum weight- the next node to
+	// be dealing with
 	private Integer isNextMin() {
 		node_data ans = null;
 		for (node_data key : this.current.getV()) {
@@ -164,7 +166,7 @@ public class Graph_Algo implements graph_algorithms {
 		return ans.getKey();
 	}
 
-// we initialize the src weight to be 0, and the others to be infinity
+	// we initialize the src weight to be 0, and the others to be infinity
 	private void setWeight(int src) {
 		for (node_data key : this.current.getV()) {
 			if (key.getKey() != src)
@@ -174,16 +176,12 @@ public class Graph_Algo implements graph_algorithms {
 		}
 	}
 
-	private boolean isContained(int src, int dest) {
-		int count = 0;
+	private boolean isContained(int id) {
 		for (node_data key : this.current.getV()) {
-			if (key.getKey() == src)
-				count++;
-			if (key.getKey() == dest)
-				count++;
+			if (key.getKey() == id)
+				return true;
 		}
-		// two means they are both contained in the nodes in the graph
-		return (count == 2) ? true : false;
+		return false;
 
 	}
 
@@ -191,14 +189,14 @@ public class Graph_Algo implements graph_algorithms {
 	public double shortestPathDist(int src, int dest) {
 		if (list == null) {
 			shortestPath(src, dest);
-			// System.out.println(list.toString());
 		}
 		return sumPath();
 	}
 
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
-		if (!isContained(src, dest)) {
+		if (!isContained(src) || !isContained(dest)) {
+			list = null;
 			throw new RuntimeException("nodes must be in the graph");
 		}
 
@@ -207,7 +205,6 @@ public class Graph_Algo implements graph_algorithms {
 			return null;
 
 		setWeight(src); // setting the start point
-		// System.out.println(this.current.getNode(src).getWeight());
 		// while we have more nodes to go to- inner function
 		while (isVisited()) {
 			Integer id = isNextMin();
@@ -238,13 +235,65 @@ public class Graph_Algo implements graph_algorithms {
 			temp = this.current.getNode(Integer.parseInt(temp.getInfo()));
 		}
 		list.add(temp);
-		return list;
+		 reverse(list);
+		return (list);
 	}
 
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
-		// TODO Auto-generated method stub
-		return null;
+		boolean flag = true;
+		// first checking that all the keys in the targets list are contains in the
+		// graph.nodes
+		for (int key = targets.size() - 1; key >= 0; key--) {
+			if (!isContained(targets.get(key))) // once a key in not contained - return null - there isnt a path
+				return null;
+		}
+		List<node_data> path = new ArrayList<node_data>(); // creating new list
+
+		for (int i = 0; i < targets.size() - 1; i++) {
+			if (targets.get(i) == targets.get(i + 1)) {
+				continue;
+			}
+			initVisited();
+			List<node_data> temp = shortestPath(targets.get(i), targets.get(i + 1));
+			if (temp != null) { // if there is a path between these 2 nodes
+				reverse(temp);
+				if (i > 0) { // if its not the first concat of the paths
+					temp.remove(0);
+				}
+				path.addAll(temp);
+			} else { // if there is no path, possible to happen once, move this node to last.
+				if (flag) {
+					int save = targets.get(i);
+					targets.remove(0);
+					targets.add(save);
+					flag = false;
+					i--;
+				} else
+					return null;
+
+			}
+		}
+
+		return path;
+
+	}
+
+	private void reverse(List<node_data> temp) {
+		int i = 0;
+		int j = temp.size() - 1;
+		node_data num;
+		while (i <= j) {
+			num = temp.get(i);
+			temp.add(i, temp.get(j));
+			temp.remove(i + 1);
+			temp.add(j, num);
+			temp.remove(j + 1);
+			i++;
+			j--;
+
+		}
+
 	}
 
 	@Override

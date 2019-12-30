@@ -1,5 +1,8 @@
 package dataStructure;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import algorithms.Graph_Algo;
 import gui_graph.GUI_window;
 import utils.Point3D;
@@ -20,14 +23,15 @@ public class test {
 		d1.connect(2, 3, 4);
 		d1.connect(3, 4, 4);
 		d1.connect(3, 1, 4);
-		d1.connect(4, 2, 4);
+		d1.connect(3, 4, 4);
 		Graph_Algo d2 = new Graph_Algo();
 		d2.init(d1);
-//		 System.out.println(d2.getGraph());
-//		 System.out.println(d2.isConnected());
-//		 d2.save("myGraph.txt");
-//		 d2.init("myGraph.txt");
+		System.out.println(d2.getGraph());
+		// System.out.println(d2.isConnected());
+		// d2.save("myGraph.txt");
+		// d2.init("myGraph.txt");
 		GUI_window g = new GUI_window(d2);
 		g.setVisible(true);
+
 	}
 }
