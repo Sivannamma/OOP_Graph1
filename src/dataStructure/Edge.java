@@ -1,15 +1,16 @@
 package dataStructure;
 
 import java.util.HashMap;
+import java.io.Serializable;
 
-public class Edge implements edge_data {
+public class Edge implements edge_data, Serializable {
 	private int src; // where the edge comes from
 	private int dst; // where the edge ends
 	private double cost;
 
 	public Edge copy() { // copy function
 		Edge n = new Edge(this.src, this.dst, this.cost);
-		 HashMap<Integer, edge_data> newHash= new  HashMap<Integer, edge_data>();
+		HashMap<Integer, edge_data> newHash = new HashMap<Integer, edge_data>();
 		return n;
 	}
 
@@ -40,26 +41,22 @@ public class Edge implements edge_data {
 
 	@Override
 	public String getInfo() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void setInfo(String s) {
-		// TODO Auto-generated method stub
-
+		return;
 	}
 
 	@Override
 	public int getTag() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void setTag(int t) {
-		// TODO Auto-generated method stub
-
+		return;
 	}
 
 	public String toString() {

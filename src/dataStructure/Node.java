@@ -1,8 +1,9 @@
 package dataStructure;
 
 import utils.Point3D;
+import java.io.Serializable;
 
-public class Node implements node_data {
+public class Node implements node_data, Serializable{
 	private boolean isFirst = true;
 	private int id; // the name of the node
 	private int info; // the node we came from - the parent
@@ -18,7 +19,7 @@ public class Node implements node_data {
 //		this.weight = Double.POSITIVE_INFINITY;
 //	}
 
-	public Node(int id,Point3D point) {
+	public Node(int id, Point3D point) {
 		this.id = id;
 		this.weight = Double.POSITIVE_INFINITY;
 		this.tag = 0;
@@ -32,7 +33,7 @@ public class Node implements node_data {
 	}
 
 	public Node copy() { // copy function
-		Node n = new Node(this.id,this.point);
+		Node n = new Node(this.id, this.point);
 		n.weight = this.weight;
 		n.tag = this.tag;
 		n.info = this.info;
@@ -47,16 +48,16 @@ public class Node implements node_data {
 	@Override
 	public Point3D getLocation() {
 		return this.point;
-		
+
 	}
 
 	@Override
 	public void setLocation(Point3D p) {
-		double x=p.x();
-		double y=p.y();
-		double z=p.z();
+		double x = p.x();
+		double y = p.y();
+		double z = p.z();
 
-		this.point=new Point3D (x,y,z);
+		this.point = new Point3D(x, y, z);
 	}
 
 	@Override
@@ -72,12 +73,12 @@ public class Node implements node_data {
 	@Override
 	public String getInfo() {
 		return String.valueOf(info);
-		
+
 	}
 
 	@Override
 	public void setInfo(String s) {
-		this.info=Integer.valueOf(s);
+		this.info = Integer.valueOf(s);
 
 	}
 

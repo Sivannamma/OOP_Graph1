@@ -9,10 +9,10 @@ import utils.Point3D;
 
 public class test {
 	public static void main(String[] args) {
-		Node n1 = new Node(1, new Point3D(15, 23));
-		Node n2 = new Node(2, new Point3D(34, 67));
-		Node n3 = new Node(3, new Point3D(23, 65));
-		Node n4 = new Node(4, new Point3D(15, 23));
+		Node n1 = new Node(1, new Point3D(0, 0));
+		Node n2 = new Node(2, new Point3D(340, 107));
+		Node n3 = new Node(3, new Point3D(230, 195));
+		Node n4 = new Node(4, new Point3D(200, 123));
 
 		DGraph d1 = new DGraph();
 		d1.addNode(n1);
@@ -26,12 +26,13 @@ public class test {
 		d1.connect(3, 4, 4);
 		Graph_Algo d2 = new Graph_Algo();
 		d2.init(d1);
-		System.out.println(d2.getGraph());
-		// System.out.println(d2.isConnected());
-		// d2.save("myGraph.txt");
-		// d2.init("myGraph.txt");
+//		System.out.println(d2.getGraph());
+//		System.out.println(d2.isConnected());
+		d2.save("myGraph.txt");
+//		d2.init("myGraph.txt");
 		GUI_window g = new GUI_window(d2);
 		g.setVisible(true);
+		
 
 	}
 }

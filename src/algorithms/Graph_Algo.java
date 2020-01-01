@@ -7,9 +7,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-
+import java.nio.file.Path;
+import java.io.Serializable;
+import java.io.*;
 import dataStructure.DGraph;
 import dataStructure.Node;
 import dataStructure.edge_data;
@@ -23,7 +24,7 @@ import dataStructure.node_data;
  * @author
  *
  */
-public class Graph_Algo implements graph_algorithms {
+public class Graph_Algo implements graph_algorithms, java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private graph current;
 	private List<node_data> list;
@@ -36,12 +37,15 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public void init(String file_name) {
+		Graph_Algo temp = new Graph_Algo();
+		temp = null;
 
 		try {
 			FileInputStream file = new FileInputStream(file_name);
 			ObjectInputStream in = new ObjectInputStream(file);
 
-			this.current = (graph) in.readObject();
+			temp.current = (graph) in.readObject();
+			this.current = temp.current;
 
 			in.close();
 			file.close();
@@ -62,7 +66,6 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public void save(String file_name) {
-
 		try {
 			FileOutputStream file = new FileOutputStream(file_name);
 			ObjectOutputStream out = new ObjectOutputStream(file);
@@ -134,11 +137,11 @@ public class Graph_Algo implements graph_algorithms {
 		}
 		double ans = 0;
 
-		for (int j = 0; j < list.size() - 1; j++) {
+		for (int j = list.size() - 1; j > 0; j--) {
 			// getting the edges that are connected to the node_data in place j of the list
 			Collection<edge_data> col = this.current.getE(list.get(j).getKey());
 			for (edge_data e : col) { // iterating through the neighboors of this current node
-				if (e.getDest() == list.get(j + 1).getKey())
+				if (e.getDest() == list.get(j - 1).getKey())
 					ans += e.getWeight();
 			}
 		}
@@ -187,17 +190,17 @@ public class Graph_Algo implements graph_algorithms {
 
 	@Override
 	public double shortestPathDist(int src, int dest) {
-		if (list == null) {
-			shortestPath(src, dest);
-		}
+		list = null;
+		shortestPath(src, dest);
 		return sumPath();
 	}
 
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
+		initVisited();
 		if (!isContained(src) || !isContained(dest)) {
 			list = null;
-			throw new RuntimeException("nodes must be in the graph");
+			return list;
 		}
 
 		Collection<edge_data> nei = this.current.getE(src);
@@ -235,7 +238,7 @@ public class Graph_Algo implements graph_algorithms {
 			temp = this.current.getNode(Integer.parseInt(temp.getInfo()));
 		}
 		list.add(temp);
-		 reverse(list);
+		// reverse(list);
 		return (list);
 	}
 
@@ -279,7 +282,10 @@ public class Graph_Algo implements graph_algorithms {
 
 	}
 
-	private void reverse(List<node_data> temp) {
+	public void reverse(List<node_data> temp) {
+		if (temp == null) {
+			return;
+		}
 		int i = 0;
 		int j = temp.size() - 1;
 		node_data num;
@@ -309,6 +315,10 @@ public class Graph_Algo implements graph_algorithms {
 			Collection<edge_data> nei = this.current.getE(n.getKey());
 		}
 		return g;
+	}
+
+	public List<node_data> getList() {
+		return this.list;
 	}
 
 }

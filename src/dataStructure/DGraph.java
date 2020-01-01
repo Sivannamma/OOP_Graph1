@@ -2,10 +2,11 @@ package dataStructure;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.io.Serializable;
 
 import com.google.gson.Gson;
 
-public class DGraph implements graph {
+public class DGraph implements graph, Serializable {
 	private HashMap<Integer, node_data> map;
 	private HashMap<node_data, HashMap<Integer, edge_data>> neighboors;
 	private int MC;
@@ -81,10 +82,8 @@ public class DGraph implements graph {
 						this.neighboors.get(n).remove(dest);
 						break;
 					}
-
 				}
 			}
-
 		}
 	}
 
