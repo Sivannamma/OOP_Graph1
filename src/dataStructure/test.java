@@ -25,12 +25,21 @@ public class test {
 		d1.connect(3, 1, 4);
 		d1.connect(3, 4, 4);
 		Graph_Algo d2 = new Graph_Algo();
+		Graph_Algo d4 = new Graph_Algo();
 		d2.init(d1);
 //		System.out.println(d2.getGraph());
 //		System.out.println(d2.isConnected());
-		d2.save("myGraph.txt");
+		//d2.save("myGraph.txt");
 //		d2.init("myGraph.txt");
-		GUI_window g = new GUI_window(d2);
+		graph d3 = new DGraph();
+		d3=d2.copy();
+		d4.init(d3);
+		d2.getGraph().removeNode(1);
+		
+		
+		
+		GUI_window g = new GUI_window(d4);
+		System.out.println(d2.getGraph());
 		g.setVisible(true);
 		
 

@@ -157,30 +157,31 @@ public class GUI_window extends JFrame implements ActionListener, MouseListener 
 		super.paint(g1);
 		// Graphics g1 = panel.getGraphics();
 		g1.setFont(new Font("David", 10, 14));
-
-		utils.Point3D current = null;
-		for (node_data key : this.graph.getGraph().getV()) {
-			g1.setColor(Color.black);
-			Collection<edge_data> col = this.graph.getGraph().getE(key.getKey());
-			// drawing the current dot
-			current = key.getLocation();
-			g1.fillOval((int) current.ix() + X_OFFSET, (int) (current.iy() + Y_OFFSET), 8, 8);
-			// drawing the id of the node
-			g1.drawString(key.getKey() + "", (int) current.ix() + X_OFFSET, (int) (current.iy() + Y_OFFSET));
-			// going over the nei of the key, to draw lines between them
-			for (edge_data edge : col) {
-				int dest = edge.getDest();
-				node_data toBe = this.graph.getGraph().getNode(dest);
-				utils.Point3D toBe_p = toBe.getLocation();
-				g1.setColor(Color.lightGray);
-				// line
-				g1.drawLine((int) current.ix() + X_OFFSET, (int) (current.iy() + Y_OFFSET),
-						(int) toBe_p.ix() + X_OFFSET, (int) (toBe_p.iy() + Y_OFFSET));
-				// the weight
-				g1.setColor(Color.blue);
-				g1.setFont(new Font("David", 10, 14));
-				g1.drawString(edge.getWeight() + "", (int) ((current.ix() + X_OFFSET + toBe_p.ix() + X_OFFSET) / 2),
-						(int) (current.iy() + Y_OFFSET + toBe_p.iy() + Y_OFFSET) / 2);
+		if (this.graph.getGraph() != null) {
+			utils.Point3D current = null;
+			for (node_data key : this.graph.getGraph().getV()) {
+				g1.setColor(Color.black);
+				Collection<edge_data> col = this.graph.getGraph().getE(key.getKey());
+				// drawing the current dot
+				current = key.getLocation();
+				g1.fillOval((int) current.ix() + X_OFFSET, (int) (current.iy() + Y_OFFSET), 8, 8);
+				// drawing the id of the node
+				g1.drawString(key.getKey() + "", (int) current.ix() + X_OFFSET, (int) (current.iy() + Y_OFFSET));
+				// going over the nei of the key, to draw lines between them
+				for (edge_data edge : col) {
+					int dest = edge.getDest();
+					node_data toBe = this.graph.getGraph().getNode(dest);
+					utils.Point3D toBe_p = toBe.getLocation();
+					g1.setColor(Color.lightGray);
+					// line
+					g1.drawLine((int) current.ix() + X_OFFSET, (int) (current.iy() + Y_OFFSET),
+							(int) toBe_p.ix() + X_OFFSET, (int) (toBe_p.iy() + Y_OFFSET));
+					// the weight
+					g1.setColor(Color.blue);
+					g1.setFont(new Font("David", 10, 14));
+					g1.drawString(edge.getWeight() + "", (int) ((current.ix() + X_OFFSET + toBe_p.ix() + X_OFFSET) / 2),
+							(int) (current.iy() + Y_OFFSET + toBe_p.iy() + Y_OFFSET) / 2);
+				}
 			}
 		}
 
@@ -307,8 +308,7 @@ public class GUI_window extends JFrame implements ActionListener, MouseListener 
 			try {
 				src = Integer.parseInt(text_src.getText());
 				this.graph.getGraph().removeNode(src);
-				JOptionPane.showMessageDialog(null, "The node " + src + " has been succesfuly removed", "Delete:",
-						JOptionPane.DEFAULT_OPTION);
+
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, "Nodes must be an integer", "Error", JOptionPane.DEFAULT_OPTION);
 			}
@@ -342,8 +342,16 @@ public class GUI_window extends JFrame implements ActionListener, MouseListener 
 			break;
 		}
 		case "Load to graph": {
-			String ans;
-			// this.graph.init(ans);
+			String ans = "";
+
+			JFileChooser chooser = new JFileChooser();
+			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			int returnVal = chooser.showOpenDialog(this);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+				ans = chooser.getSelectedFile().getAbsolutePath();
+			}
+			this.graph.init(ans);
 
 			break;
 		}

@@ -37,15 +37,13 @@ public class Graph_Algo implements graph_algorithms, java.io.Serializable {
 
 	@Override
 	public void init(String file_name) {
-		Graph_Algo temp = new Graph_Algo();
-		temp = null;
 
 		try {
 			FileInputStream file = new FileInputStream(file_name);
 			ObjectInputStream in = new ObjectInputStream(file);
 
-			temp.current = (graph) in.readObject();
-			this.current = temp.current;
+			this.current = (graph) in.readObject();
+
 
 			in.close();
 			file.close();
@@ -130,7 +128,7 @@ public class Graph_Algo implements graph_algorithms, java.io.Serializable {
 		return false;
 	}
 
-//
+	//
 	private double sumPath() {
 		if (list == null || list.isEmpty()) {
 			return Double.POSITIVE_INFINITY;
@@ -305,14 +303,21 @@ public class Graph_Algo implements graph_algorithms, java.io.Serializable {
 	@Override
 	public graph copy() {
 
-		DGraph g = new DGraph();
+		graph g = new DGraph();
 		Collection<node_data> col = this.current.getV();
 
 		// for the main hashmap.
 		for (node_data n : col) {
 			node_data newNode = new Node(n.getKey(), n.getLocation());
 			g.addNode(newNode);
+
+
+		}
+		for (node_data n : col) {
 			Collection<edge_data> nei = this.current.getE(n.getKey());
+			for(edge_data e: nei) {
+				g.connect(e.getSrc(), e.getDest(), e.getWeight());
+			}
 		}
 		return g;
 	}

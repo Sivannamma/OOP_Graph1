@@ -32,14 +32,18 @@ public class DGraph implements graph, Serializable {
 
 	@Override
 	public void addNode(node_data n) {
+		if(!this.map.containsKey(n.getKey())) {
 		this.map.put(n.getKey(), n);
 		// adding to the neighboors hashmap, initializing the inner hashmap
 		this.neighboors.put(n, new HashMap<Integer, edge_data>());
 		MC++; // because we performed a change in the graph
+		}
 	}
 
 	@Override
 	public void connect(int src, int dest, double w) {
+		if (!this.map.containsKey(src) || !this.map.containsKey(dest))
+			return;
 		if (!(this.neighboors.get(this.map.get(src)).containsKey(dest)))
 			EdgeCount++;
 		this.neighboors.get(this.map.get(src)).put(dest, new Edge(src, dest, w));
