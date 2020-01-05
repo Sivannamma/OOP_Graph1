@@ -11,7 +11,7 @@ public class Node implements node_data, Serializable {
 	private boolean isFirst = true;
 	private int id; // the name of the node
 	private int info; // the node we came from - the parent
-	private int tag; // variable that we know if we have been in some
+	private int tag; // variable that we know if we have been in some node (isVisited)
 	private double weight; // the cost from one vertext to another
 	private Point3D point;
 	private static int NIL = -1;
@@ -29,6 +29,19 @@ public class Node implements node_data, Serializable {
 		}
 	}
 
+	public boolean equals(Node other) {
+		if(other.getKey()!= this.getKey()) {
+			return false;
+		}
+		if(other.getLocation().x()!=this.getLocation().x()) {
+			return false;
+		}
+		
+		if(other.getLocation().y()!=this.getLocation().y()) {
+			return false;
+		}
+		return true;
+	}
 	public Node copy() { // copy function
 		Node n = new Node(this.id, this.point);
 		n.weight = this.weight;

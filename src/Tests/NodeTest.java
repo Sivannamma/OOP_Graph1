@@ -4,66 +4,59 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import dataStructure.Node;
+import utils.Point3D;
+
 class NodeTest {
 
-	@Test
-	void testNode() {
-		fail("Not yet implemented");
-	}
+
 
 	@Test
 	void testCopy() {
-		fail("Not yet implemented");
+		Point3D p = new Point3D(5, 10);
+		Node n = new Node(4, p);
+		Node n2 = n.copy();
+		if(!n2.equals(n)) {
+			fail();
+		}
 	}
 
 	@Test
 	void testGetKey() {
-		fail("Not yet implemented");
+		Node n = new Node(4, new Point3D(23, 34));
+		int temp = n.getKey();
+		if (n.getKey() != temp) {
+			fail();
+		}
 	}
 
 	@Test
 	void testGetLocation() {
-		fail("Not yet implemented");
+		Node n = new Node(4, new Point3D(23, 34));
+		Point3D temp = n.getLocation();
+		if (n.getLocation() != temp) {
+			fail();
+		}
 	}
 
 	@Test
 	void testSetLocation() {
-		fail("Not yet implemented");
+		Node n = new Node(4, new Point3D(23, 34));
+		n.setLocation(new Point3D(6,8));
+		Point3D temp = new Point3D(6, 8);
+		if (!n.getLocation().equalsXY(temp)) {
+			fail();
+		}
 	}
 
 	@Test
 	void testGetWeight() {
-		fail("Not yet implemented");
+		Node n = new Node(4, new Point3D(23, 34));
+		double temp = n.getWeight();
+		if (n.getWeight()!= temp) {
+			fail();
+		}
 	}
 
-	@Test
-	void testSetWeight() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testGetInfo() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testSetInfo() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testGetTag() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testSetTag() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testToString() {
-		fail("Not yet implemented");
-	}
 
 }

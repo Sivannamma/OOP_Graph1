@@ -54,9 +54,6 @@ public class Graph_Algo implements graph_algorithms, java.io.Serializable {
 
 			in.close();
 			file.close();
-
-			System.out.println("Object has been deserialized");
-			System.out.println(this.current);
 		}
 
 		catch (IOException ex) {
@@ -76,11 +73,10 @@ public class Graph_Algo implements graph_algorithms, java.io.Serializable {
 			ObjectOutputStream out = new ObjectOutputStream(file);
 
 			out.writeObject(this.current);
-
+			
 			out.close();
 			file.close();
 
-			System.out.println("Graph has been serialized");
 		} catch (IOException ex) {
 			System.out.println("IOException is caught");
 		}
@@ -265,10 +261,6 @@ public class Graph_Algo implements graph_algorithms, java.io.Serializable {
 			initVisited();
 			List<node_data> temp = shortestPath(targets.get(i), targets.get(i + 1));
 			// if one time we couldnt find a path there is no TSP
-			if (temp == null) {
-				path.clear();
-				return path;
-			}
 			if (temp != null) { // if there is a path between these 2 nodes
 				reverse(temp);
 				if (i > 0 && temp.size() > 0) { // if its not the first concat of the paths
@@ -284,7 +276,6 @@ public class Graph_Algo implements graph_algorithms, java.io.Serializable {
 					i--;
 				} else
 					return null;
-
 			}
 		}
 

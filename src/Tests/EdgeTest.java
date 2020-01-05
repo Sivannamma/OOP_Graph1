@@ -4,61 +4,48 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import dataStructure.Edge;
+
 class EdgeTest {
 
 	@Test
-	void testCopy() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testEdge() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	void testSetCost() {
-		fail("Not yet implemented");
+		Edge e = new Edge(2, 5, 10);
+		e.setCost(5);
+
+		if (5 != e.getWeight()) {
+			fail();
+		}
 	}
 
 	@Test
 	void testGetSrc() {
-		fail("Not yet implemented");
+		Edge e = new Edge(2, 5, 10);
+		int srcTemp = e.getSrc();
+
+		if (srcTemp != 2) {
+			fail();
+		}
 	}
 
 	@Test
 	void testGetDest() {
-		fail("Not yet implemented");
+		Edge e = new Edge(2, 5, 10);
+		int srcTemp = e.getDest();
+
+		if (srcTemp != 5) {
+			fail();
+		}
 	}
 
 	@Test
 	void testGetWeight() {
-		fail("Not yet implemented");
-	}
+		Edge e = new Edge(2, 5, 10);
+		double srcTemp = e.getWeight();
 
-	@Test
-	void testGetInfo() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testSetInfo() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testGetTag() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testSetTag() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testToString() {
-		fail("Not yet implemented");
+		if (srcTemp != 10) {
+			fail();
+		}
 	}
 
 }
