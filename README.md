@@ -5,34 +5,34 @@ Project description: this project support creating Nodes that represents dots of
 In this class you can use a gui window to navigate through the project, helping you to use the functions in an easy way.
 
 Node is a class that implements from an interface called node_data which includes the following function:
-public int getKey();
-public Point3D getLocation();
-public void setLocation(Point3D p);
-public double getWeight();
-public void setWeight(double w);
-public String getInfo();
-public void setInfo(String s);
-public int getTag();
-public void setTag(int t);
+1. public int getKey();
+2. public Point3D getLocation();
+3. public void setLocation(Point3D p);
+4. public double getWeight();
+5. public void setWeight(double w);
+6. public String getInfo();
+7. public void setInfo(String s);
+8. public int getTag();
+9. public void setTag(int t);
 
 Edge is a class that implements from an interface called edge_data , which includes the following functions:
-public int getSrc();
-public int getDest();
-public double getWeight();
-public String getInfo();
-public void setInfo(String s);
-public int getTag();
-public void setTag(int t);
+1. public int getSrc();
+2. public int getDest();
+3. public double getWeight();
+4. public String getInfo();
+5. public void setInfo(String s);
+6. public int getTag();
+7. public void setTag(int t);
 
 Graph_algo is a class   that implements from an interface called graph_algorithms,which includes the following functions:
-public void init(graph g);
-public graph copy();
-public void init(String file_name);
-public void save(String file_name);
-public boolean isConnected();
-public double shortestPathDist(int src, int dest);
-public List<node_data> shortestPath(int src, int dest);
-public List<node_data> TSP(List<Integer> targets);
+1. public void init(graph g);
+2. public graph copy();
+3. public void init(String file_name);
+4. public void save(String file_name);
+5. public boolean isConnected();
+6. public double shortestPathDist(int src, int dest);
+7. public List<node_data> shortestPath(int src, int dest);
+8. public List<node_data> TSP(List<Integer> targets);
 
 
 Those functions implements Serializable which lets us read/save from a file.
