@@ -5,34 +5,34 @@ Project description: this project support creating Nodes that represents dots of
 In this class you can use a gui window to navigate through the project, helping you to use the functions in an easy way.
 
 Node is a class that implements from an interface called node_data which includes the following function:
-	public int getKey();
-	public Point3D getLocation();
-	public void setLocation(Point3D p);
-	public double getWeight();
-	public void setWeight(double w);
-	public String getInfo();
-	public void setInfo(String s);
-	public int getTag();
-	public void setTag(int t);
+public int getKey();
+public Point3D getLocation();
+public void setLocation(Point3D p);
+public double getWeight();
+public void setWeight(double w);
+public String getInfo();
+public void setInfo(String s);
+public int getTag();
+public void setTag(int t);
 
 Edge is a class that implements from an interface called edge_data , which includes the following functions:
-	public int getSrc();
-	public int getDest();
-	public double getWeight();
-	public String getInfo();
-	public void setInfo(String s);
-	public int getTag();
-	public void setTag(int t);
+public int getSrc();
+public int getDest();
+public double getWeight();
+public String getInfo();
+public void setInfo(String s);
+public int getTag();
+public void setTag(int t);
 
 Graph_algo is a class   that implements from an interface called graph_algorithms,which includes the following functions:
-	public void init(graph g);
-	public graph copy();
-	public void init(String file_name);
-	public void save(String file_name);
-	public boolean isConnected();
-	public double shortestPathDist(int src, int dest);
-	public List<node_data> shortestPath(int src, int dest);
-	public List<node_data> TSP(List<Integer> targets);
+public void init(graph g);
+public graph copy();
+public void init(String file_name);
+public void save(String file_name);
+public boolean isConnected();
+public double shortestPathDist(int src, int dest);
+public List<node_data> shortestPath(int src, int dest);
+public List<node_data> TSP(List<Integer> targets);
 
 
 Those functions implements Serializable which lets us read/save from a file.
