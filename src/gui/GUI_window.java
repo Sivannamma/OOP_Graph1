@@ -1,4 +1,4 @@
-package gui_graph;
+package gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -26,6 +26,7 @@ import dataStructure.Node;
 import dataStructure.edge_data;
 import dataStructure.node_data;
 import utils.Point3D;
+import dataStructure.*;
 
 public class GUI_window extends JFrame implements ActionListener, MouseListener {
 
@@ -45,6 +46,11 @@ public class GUI_window extends JFrame implements ActionListener, MouseListener 
 
 	public GUI_window(Graph_Algo graph) {
 		this.graph = graph;
+		init_window();
+	}
+
+	public GUI_window(graph g) {
+		this.graph = new Graph_Algo(g);
 		init_window();
 	}
 
@@ -69,7 +75,7 @@ public class GUI_window extends JFrame implements ActionListener, MouseListener 
 		label.setVisible(false);
 
 		// the size of the window
-		this.setSize(600, 600);
+		this.setSize(1000, 1200);
 		// setting that the program is terminated when we close 'X' on the window as
 		// well.
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -235,6 +241,8 @@ public class GUI_window extends JFrame implements ActionListener, MouseListener 
 				JOptionPane.showMessageDialog(null, "src and dest suppoused to be an integer", "Error",
 						JOptionPane.DEFAULT_OPTION);
 			}
+			setFalse();
+			repaint();
 			break;
 
 		}
@@ -278,7 +286,7 @@ public class GUI_window extends JFrame implements ActionListener, MouseListener 
 			setTextFalse();
 			setFalse();
 			this.graph.getGraph().addNode(new Node(id, point));
-
+			repaint();
 			break;
 		}
 		case "Delete node": {
@@ -313,6 +321,7 @@ public class GUI_window extends JFrame implements ActionListener, MouseListener 
 				JOptionPane.showMessageDialog(null, "Nodes must be an integer", "Error", JOptionPane.DEFAULT_OPTION);
 			}
 			setFalse();
+			repaint();
 			break;
 		}
 
@@ -352,7 +361,7 @@ public class GUI_window extends JFrame implements ActionListener, MouseListener 
 				ans = chooser.getSelectedFile().getAbsolutePath();
 			}
 			this.graph.init(ans);
-
+			repaint();
 			break;
 		}
 		case "isConnected": {
@@ -408,7 +417,6 @@ public class GUI_window extends JFrame implements ActionListener, MouseListener 
 
 		}
 		}
-		repaint();
 	}
 
 	private void setTextFalse() {

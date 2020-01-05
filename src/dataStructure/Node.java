@@ -3,7 +3,11 @@ package dataStructure;
 import utils.Point3D;
 import java.io.Serializable;
 
-public class Node implements node_data, Serializable{
+public class Node implements node_data, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private boolean isFirst = true;
 	private int id; // the name of the node
 	private int info; // the node we came from - the parent
@@ -11,13 +15,6 @@ public class Node implements node_data, Serializable{
 	private double weight; // the cost from one vertext to another
 	private Point3D point;
 	private static int NIL = -1;
-
-//	public Node() { // **************************//
-//		this.id = NIL; // as a default;
-//		this.visited = false;
-//		this.pred = NIL;
-//		this.weight = Double.POSITIVE_INFINITY;
-//	}
 
 	public Node(int id, Point3D point) {
 		this.id = id;

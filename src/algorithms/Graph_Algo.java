@@ -30,6 +30,14 @@ public class Graph_Algo implements graph_algorithms, java.io.Serializable {
 	private List<node_data> list;
 	private double costAns = 0;
 
+	public Graph_Algo(graph _graph) {
+		init(_graph);
+	}
+
+	public Graph_Algo() {
+		this.current = new DGraph();
+	}
+
 	@Override
 	public void init(graph g) {
 		this.current = g;
@@ -43,7 +51,6 @@ public class Graph_Algo implements graph_algorithms, java.io.Serializable {
 			ObjectInputStream in = new ObjectInputStream(file);
 
 			this.current = (graph) in.readObject();
-
 
 			in.close();
 			file.close();
@@ -257,9 +264,14 @@ public class Graph_Algo implements graph_algorithms, java.io.Serializable {
 			}
 			initVisited();
 			List<node_data> temp = shortestPath(targets.get(i), targets.get(i + 1));
+			// if one time we couldnt find a path there is no TSP
+			if (temp == null) {
+				path.clear();
+				return path;
+			}
 			if (temp != null) { // if there is a path between these 2 nodes
 				reverse(temp);
-				if (i > 0) { // if its not the first concat of the paths
+				if (i > 0 && temp.size() > 0) { // if its not the first concat of the paths
 					temp.remove(0);
 				}
 				path.addAll(temp);
@@ -311,11 +323,10 @@ public class Graph_Algo implements graph_algorithms, java.io.Serializable {
 			node_data newNode = new Node(n.getKey(), n.getLocation());
 			g.addNode(newNode);
 
-
 		}
 		for (node_data n : col) {
 			Collection<edge_data> nei = this.current.getE(n.getKey());
-			for(edge_data e: nei) {
+			for (edge_data e : nei) {
 				g.connect(e.getSrc(), e.getDest(), e.getWeight());
 			}
 		}

@@ -4,15 +4,13 @@ import java.util.HashMap;
 import java.io.Serializable;
 
 public class Edge implements edge_data, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int src; // where the edge comes from
 	private int dst; // where the edge ends
 	private double cost;
-
-	public Edge copy() { // copy function
-		Edge n = new Edge(this.src, this.dst, this.cost);
-		HashMap<Integer, edge_data> newHash = new HashMap<Integer, edge_data>();
-		return n;
-	}
 
 	public Edge(int src, int dst, double cost) {
 		this.src = src;

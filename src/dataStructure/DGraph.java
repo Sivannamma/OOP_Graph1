@@ -7,6 +7,10 @@ import java.io.Serializable;
 import com.google.gson.Gson;
 
 public class DGraph implements graph, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private HashMap<Integer, node_data> map;
 	private HashMap<node_data, HashMap<Integer, edge_data>> neighboors;
 	private int MC;
@@ -17,7 +21,6 @@ public class DGraph implements graph, Serializable {
 		this.neighboors = new HashMap<node_data, HashMap<Integer, edge_data>>();
 		MC = 0;
 		EdgeCount = 0;
-
 	}
 
 	@Override
@@ -32,20 +35,24 @@ public class DGraph implements graph, Serializable {
 
 	@Override
 	public void addNode(node_data n) {
-		if(!this.map.containsKey(n.getKey())) {
-		this.map.put(n.getKey(), n);
-		// adding to the neighboors hashmap, initializing the inner hashmap
-		this.neighboors.put(n, new HashMap<Integer, edge_data>());
-		MC++; // because we performed a change in the graph
+		if (!this.map.containsKey(n.getKey())) {
+			this.map.put(n.getKey(), n);
+			// adding to the neighboors hashmap, initializing the inner hashmap
+			this.neighboors.put(n, new HashMap<Integer, edge_data>());
+			MC++; // because we performed a change in the graph
 		}
 	}
 
 	@Override
 	public void connect(int src, int dest, double w) {
+		if (w < 0) // cant connect a edge with weight that is negative
+			return;
+		if (src == dest) // if the src and dest are equals we arent connecting an edge
+			return;
 		if (!this.map.containsKey(src) || !this.map.containsKey(dest))
 			return;
 		if (!(this.neighboors.get(this.map.get(src)).containsKey(dest)))
-			EdgeCount++;
+			this.EdgeCount++;
 		this.neighboors.get(this.map.get(src)).put(dest, new Edge(src, dest, w));
 		MC++; // because we performed a change in the graph
 	}
@@ -126,4 +133,5 @@ public class DGraph implements graph, Serializable {
 		}
 		return ans;
 	}
+
 }
